@@ -1,4 +1,25 @@
-// Recebe os meus parâmetros de UTM
+/**
+ * Add um parâmetro em URL ou modificar se já existir
+ */
+function addParamToUrl(url, param, value) {
+    param = encodeURIComponent(param);
+    var r = "([&?]|&amp;)" + param + "\\b(?:=(?:[^&#]*))*";
+    var a = document.createElement('a');
+    var regex = new RegExp(r);
+    var str = param + (value ? "=" + encodeURIComponent(value) : "");
+    a.href = url;
+    var q = a.search.replace(regex, "$1" + str);
+    if (q === a.search) {
+        a.search += (a.search ? "&" : "") + str;
+    } else {
+        a.search = q;
+    }
+    return a.href;
+}
+
+/**
+ * Recebe os meus parâmetros de UTM
+ */
 function getParameter(theParameter) {
     var params = window.location.search.substr(1).split('&');
     for (var i = 0; i < params.length; i++) {
@@ -77,66 +98,62 @@ if ((utm_source !== false || utm_medium !== false || campaignid !== false) && (p
 
 // Recupera os dados do cookie
 var cookie = Cookies.get('cookie_utms');
+
+// Se o cookie existir
 if (cookie != undefined) {
-    cookie_choco = JSON.parse(cookie);
+    // Quebra o JSON do cookie
+    cookie_array = JSON.parse(cookie);
 
-    cookie_source = cookie_choco["source"];
-    cookie_medium = cookie_choco["medium"];
-    cookie_campaign = cookie_choco["campaign"];
+    // Pega todas as urls presentes no site
+    urls = document.querySelectorAll('a');
 
-    cookie_content = cookie_choco["content"];
-    cookie_campaignid = cookie_choco["campaignid"];
-    cookie_adsetid = cookie_choco["adsetid"];
-    cookie_fbclid = cookie_choco["fbclid"];
-    cookie_adset = cookie_choco["adset"];
-    cookie_adid = cookie_choco["adid"];
-    cookie_term = cookie_choco["term"];
-    cookie_adgroupid = cookie_choco["adgroupid"];
-    cookie_adid = cookie_choco["adid"];
-    cookie_targetid = cookie_choco["targetid"];
-}
+    // Faz uma varredura e verifica se elas sao do WhatsApp
+    for (url in urls) {
+        if (typeof(urls[url].href) != 'undefined' && urls[url].href.includes("tracking.agenciarazza.com.br/whatsapp") == 1) {
 
-/**
- * Add um parâmetro em URL ou modificar se já existir
- */
-var addParamToUrl = function(url, param, value) {
-    param = encodeURIComponent(param);
-    var r = "([&?]|&amp;)" + param + "\\b(?:=(?:[^&#]*))*";
-    var a = document.createElement('a');
-    var regex = new RegExp(r);
-    var str = param + (value ? "=" + encodeURIComponent(value) : "");
-    a.href = url;
-    var q = a.search.replace(regex, "$1" + str);
-    if (q === a.search) {
-        a.search += (a.search ? "&" : "") + str;
-    } else {
-        a.search = q;
-    }
-    return a.href;
-}
+            // Armazena a url
+            var url_modificada = urls[url].href;
 
-// Pega todas as urls presentes no site
-urls = document.querySelectorAll('a');
+            // Adiciona os parametros nela (Se o cookie existir)
+            if (cookie_array["source"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "utm_source", cookie_array["source"]);
+            }
+            if (cookie_array["medium"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "utm_medium", cookie_array["medium"]);
+            }
+            if (cookie_array["campaign"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "utm_campaign", cookie_array["campaign"]);
+            }
+            if (cookie_array["content"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "utm_content", cookie_array["content"]);
+            }
+            if (cookie_array["campaignid"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "campaignid", cookie_array["campaignid"]);
+            }
+            if (cookie_array["adsetid"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "adsetid", cookie_array["adsetid"]);
+            }
+            if (cookie_array["fbclid"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "fbclid", cookie_array["fbclid"]);
+            }
+            if (cookie_array["adset"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "adset", cookie_array["adset"]);
+            }
+            if (cookie_array["adid"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "adid", cookie_array["adid"]);
+            }
+            if (cookie_array["term"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "utm_term", cookie_array["term"]);
+            }
+            if (cookie_array["adgroupid"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "adgroupid", cookie_array["adgroupid"]);
+            }
+            if (cookie_array["targetid"] !== false) {
+                url_modificada = addParamToUrl(url_modificada, "targetid", cookie_array["targetid"]);
+            }
 
-// Faz uma varredura e verifica se elas sao do WhatsApp
-for (url in urls) {
-    if (typeof(urls[url].href) != 'undefined' && urls[url].href.includes("tracking.agenciarazza.com.br/whatsapp") == 1) {
-
-        // Adiciona os parametros nela
-        var url_modificada = addParamToUrl(urls[url].href, "utm_source", cookie_source);
-        var url_modificada = addParamToUrl(url_modificada, "utm_medium", cookie_medium);
-        var url_modificada = addParamToUrl(url_modificada, "utm_campaign", cookie_campaign);
-        var url_modificada = addParamToUrl(url_modificada, "utm_content", cookie_content);
-        var url_modificada = addParamToUrl(url_modificada, "campaignid", cookie_campaignid);
-        var url_modificada = addParamToUrl(url_modificada, "adsetid", cookie_adsetid);
-        var url_modificada = addParamToUrl(url_modificada, "fbclid", cookie_fbclid);
-        var url_modificada = addParamToUrl(url_modificada, "adset", cookie_adset);
-        var url_modificada = addParamToUrl(url_modificada, "adid", cookie_adid);
-        var url_modificada = addParamToUrl(url_modificada, "utm_term", cookie_term);
-        var url_modificada = addParamToUrl(url_modificada, "adgroupid", cookie_adgroupid);
-        var url_modificada = addParamToUrl(url_modificada, "targetid", cookie_targetid);
-
-        // Faz a troca do href para a nova a url
-        urls[url].href = url_modificada;
+            // Faz a troca do href para a nova a url
+            urls[url].href = url_modificada;
+        }
     }
 }

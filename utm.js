@@ -1,7 +1,7 @@
 /**
  * Add um parâmetro em URL ou modificar se já existir
  */
-function addParamToUrl(url, param, value) {
+ function addParamToUrl(url, param, value) {
     param = encodeURIComponent(param);
     var r = "([&?]|&amp;)" + param + "\\b(?:=(?:[^&#]*))*";
     var a = document.createElement('a');
@@ -98,11 +98,22 @@ if ((utm_source !== false || utm_medium !== false || campaignid !== false) && (p
 
 // Recupera os dados do cookie
 var cookie = Cookies.get('cookie_utms');
-
-// Se o cookie existir
 if (cookie != undefined) {
-    // Quebra o JSON do cookie
     cookie_array = JSON.parse(cookie);
+
+    cookie_source = cookie_array["source"];
+    cookie_medium = cookie_array["medium"];
+    cookie_campaign = cookie_array["campaign"];
+
+    cookie_content = cookie_array["content"];
+    cookie_campaignid = cookie_array["campaignid"];
+    cookie_adsetid = cookie_array["adsetid"];
+    cookie_fbclid = cookie_array["fbclid"];
+    cookie_adset = cookie_array["adset"];
+    cookie_adid = cookie_array["adid"];
+    cookie_term = cookie_array["term"];
+    cookie_adgroupid = cookie_array["adgroupid"];
+    cookie_targetid = cookie_array["targetid"];
 
     // Pega todas as urls presentes no site
     urls = document.querySelectorAll('a');
@@ -115,41 +126,41 @@ if (cookie != undefined) {
             var url_modificada = urls[url].href;
 
             // Adiciona os parametros nela (Se o cookie existir)
-            if (cookie_array["source"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "utm_source", cookie_array["source"]);
+            if (cookie_source) {
+                var url_modificada = addParamToUrl(url_modificada, "utm_source", cookie_source);
             }
-            if (cookie_array["medium"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "utm_medium", cookie_array["medium"]);
+            if (cookie_medium) {
+                var url_modificada = addParamToUrl(url_modificada, "utm_medium", cookie_medium);
             }
-            if (cookie_array["campaign"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "utm_campaign", cookie_array["campaign"]);
+            if (cookie_campaign) {
+                var url_modificada = addParamToUrl(url_modificada, "utm_campaign", cookie_campaign);
             }
-            if (cookie_array["content"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "utm_content", cookie_array["content"]);
+            if (cookie_content) {
+                var url_modificada = addParamToUrl(url_modificada, "utm_content", cookie_content);
             }
-            if (cookie_array["campaignid"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "campaignid", cookie_array["campaignid"]);
+            if (cookie_campaignid) {
+                var url_modificada = addParamToUrl(url_modificada, "campaignid", cookie_campaignid);
             }
-            if (cookie_array["adsetid"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "adsetid", cookie_array["adsetid"]);
+            if (cookie_adsetid) {
+                var url_modificada = addParamToUrl(url_modificada, "adsetid", cookie_adsetid);
             }
-            if (cookie_array["fbclid"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "fbclid", cookie_array["fbclid"]);
+            if (cookie_fbclid) {
+                var url_modificada = addParamToUrl(url_modificada, "fbclid", cookie_fbclid);
             }
-            if (cookie_array["adset"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "adset", cookie_array["adset"]);
+            if (cookie_adset) {
+                var url_modificada = addParamToUrl(url_modificada, "adset", cookie_adset);
             }
-            if (cookie_array["adid"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "adid", cookie_array["adid"]);
+            if (cookie_adid) {
+                var url_modificada = addParamToUrl(url_modificada, "adid", cookie_adid);
             }
-            if (cookie_array["term"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "utm_term", cookie_array["term"]);
+            if (cookie_term) {
+                var url_modificada = addParamToUrl(url_modificada, "utm_term", cookie_term);
             }
-            if (cookie_array["adgroupid"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "adgroupid", cookie_array["adgroupid"]);
+            if (cookie_adgroupid) {
+                var url_modificada = addParamToUrl(url_modificada, "adgroupid", cookie_adgroupid);
             }
-            if (cookie_array["targetid"] !== false) {
-                url_modificada = addParamToUrl(url_modificada, "targetid", cookie_array["targetid"]);
+            if (cookie_targetid) {
+                var url_modificada = addParamToUrl(url_modificada, "targetid", cookie_targetid);
             }
 
             // Faz a troca do href para a nova a url

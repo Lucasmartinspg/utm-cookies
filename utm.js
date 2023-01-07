@@ -43,6 +43,7 @@ adset = getParameter('adset');
 adid = getParameter('adid'); // No Google também
 
 // Google Ads
+gclid = getParameter('gclid');
 utm_term = getParameter('utm_term');
 adgroupid = getParameter('adgroupid');
 targetid = getParameter('targetid');
@@ -90,6 +91,9 @@ if ((utm_source !== false || utm_medium !== false || campaignid !== false) && (p
     if (targetid !== false) {
         pepites["targetid"] = targetid;
     }
+    if (gclid !== false) {
+        pepites["gclid"] = gclid;
+    }
 
     Cookies.set('cookie_utms', pepites, {
         expires: 120
@@ -114,6 +118,7 @@ if (cookie != undefined) {
     cookie_term = cookie_array["term"];
     cookie_adgroupid = cookie_array["adgroupid"];
     cookie_targetid = cookie_array["targetid"];
+    cookie_gclid = cookie_array["gclid"];
 
     // Pega todas as urls presentes no site
     urls = document.querySelectorAll('a');
@@ -161,6 +166,9 @@ if (cookie != undefined) {
             }
             if (cookie_targetid) {
                 var url_modificada = addParamToUrl(url_modificada, "targetid", cookie_targetid);
+            }
+            if (cookie_gclid) {
+                var url_modificada = addParamToUrl(url_modificada, "gclid", cookie_gclid);
             }
 
             // Faz a troca do href para a nova a url
